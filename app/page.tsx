@@ -21,10 +21,10 @@ const PROJECTS = [
     name: 'Guía Puntana',
     description: 'Directorio de profesionales y oficios con conexión directa por WhatsApp.',
     icon: LayoutTemplate,
-    color: 'bg-orange-500',
+    bgColor: 'bg-orange-500/10',
     textColor: 'text-orange-500',
     gradient: 'from-orange-500/20 via-[#000000] to-[#000000]',
-    link: 'https://guia-puntana.vercel.app',
+    link: 'https://guia-puntana.vercel.app', // Link externo (lo dejaremos en la data por si se usa dentro del detalle)
     tags: ['Next.js', 'Supabase', 'Directorio']
   },
   {
@@ -32,7 +32,7 @@ const PROJECTS = [
     name: 'SocialNet',
     description: 'Plataforma de interacción social con recuperación de contraseñas y gestión de usuarios.',
     icon: Smartphone,
-    color: 'bg-blue-500',
+    bgColor: 'bg-blue-500/10',
     textColor: 'text-blue-500',
     gradient: 'from-blue-500/20 via-[#000000] to-[#000000]',
     link: '#',
@@ -43,7 +43,7 @@ const PROJECTS = [
     name: 'PrintFlow',
     description: 'Panel de control para gestión y calibración de impresoras 3D Createbot.',
     icon: Terminal,
-    color: 'bg-emerald-500',
+    bgColor: 'bg-emerald-500/10',
     textColor: 'text-emerald-500',
     gradient: 'from-emerald-500/20 via-[#000000] to-[#000000]',
     link: '#',
@@ -54,7 +54,7 @@ const PROJECTS = [
     name: 'DevUtils',
     description: 'Colección de herramientas y calculadoras enfocadas en programación funcional.',
     icon: Database,
-    color: 'bg-purple-500',
+    bgColor: 'bg-purple-500/10',
     textColor: 'text-purple-500',
     gradient: 'from-purple-500/20 via-[#000000] to-[#000000]',
     link: '#',
@@ -66,7 +66,7 @@ export default function HubPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Auto-play del carousel (cambia cada 5 segundos si no está el mouse encima)
+  // Auto-play del carousel
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
@@ -116,10 +116,7 @@ export default function HubPage() {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Contenedor principal del carousel */}
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-            
-            {/* Carril animado */}
             <div className="relative h-[450px] overflow-hidden rounded-2xl border border-white/10 bg-[#080808]">
               {PROJECTS.map((project, index) => {
                 const Icon = project.icon;
@@ -130,13 +127,12 @@ export default function HubPage() {
                     key={project.id}
                     className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                   >
-                    {/* Resplandor radial de fondo estilo JetBrains */}
                     <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] ${project.gradient} opacity-60`}></div>
                     
                     <div className="relative flex h-full items-center p-12 lg:p-20">
                       <div className="max-w-2xl">
                         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm">
-                          <Icon size={16} className={project.textColor} />
+                          <Icon className={`h-4 w-4 ${project.textColor}`} />
                           <span className="text-xs font-semibold uppercase tracking-wider text-gray-300">Proyecto Destacado</span>
                         </div>
                         
@@ -148,15 +144,14 @@ export default function HubPage() {
                           {project.description}
                         </p>
                         
-                        <a 
-                          href={project.link}
+                        <Link 
+                          href={`/proyectos/${project.id}`}
                           className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3.5 text-sm font-semibold text-black transition-transform hover:scale-105"
                         >
-                          Ir al Proyecto <ArrowRight size={18} />
-                        </a>
+                          Ver Detalles <ArrowRight size={18} />
+                        </Link>
                       </div>
 
-                      {/* Icono gigante decorativo a la derecha */}
                       <div className="absolute -right-10 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
                         <Icon size={400} />
                       </div>
@@ -166,21 +161,13 @@ export default function HubPage() {
               })}
             </div>
 
-            {/* Controles del Carousel */}
-            <button 
-              onClick={prevSlide}
-              className="absolute left-8 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-[#111111]/80 p-3 text-white backdrop-blur-md transition-all hover:bg-white/10 hover:scale-110"
-            >
+            <button onClick={prevSlide} className="absolute left-8 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-[#111111]/80 p-3 text-white backdrop-blur-md transition-all hover:bg-white/10 hover:scale-110">
               <ChevronLeft size={24} />
             </button>
-            <button 
-              onClick={nextSlide}
-              className="absolute right-8 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-[#111111]/80 p-3 text-white backdrop-blur-md transition-all hover:bg-white/10 hover:scale-110"
-            >
+            <button onClick={nextSlide} className="absolute right-8 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-[#111111]/80 p-3 text-white backdrop-blur-md transition-all hover:bg-white/10 hover:scale-110">
               <ChevronRight size={24} />
             </button>
 
-            {/* Indicadores (Dots) */}
             <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-3">
               {PROJECTS.map((_, index) => (
                 <button
@@ -191,53 +178,61 @@ export default function HubPage() {
                 />
               ))}
             </div>
-
           </div>
         </section>
 
-        {/* --- PRODUCT GRID (El Hub) - SIEMPRE VISIBLE, PRIMERO EN MOBILE --- */}
-        <section id="productos" className="py-12 md:py-20 bg-[#000000] md:bg-[#080808]">
+        {/* --- PRODUCT GRID --- */}
+        {/* --- PRODUCT GRID (El Hub) --- */}
+        <section id="productos" className="py-10 md:py-20 bg-[#000000] md:bg-[#080808]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-10 md:mb-12">
-              <h2 className="text-3xl font-bold text-white md:text-4xl">Nuestros Proyectos</h2>
-              <p className="mt-3 text-gray-400 md:text-lg">Explora el ecosistema de soluciones digitales.</p>
+            <div className="mb-8 md:mb-12">
+              <h2 className="text-2xl md:text-4xl font-bold text-white">Nuestros Proyectos</h2>
+              <p className="mt-2 md:mt-3 text-sm md:text-lg text-gray-400">Explora el ecosistema de soluciones digitales.</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-2 xl:gap-8">
+            {/* AQUÍ ESTÁ LA CLAVE: grid-cols-2 fuerza 2 columnas desde el tamaño más pequeño */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-2 xl:gap-8">
               {PROJECTS.map((project) => {
                 const Icon = project.icon;
                 return (
-                  <a 
+                  <Link 
                     key={project.id} 
-                    href={project.link}
-                    className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-[#111111] p-6 md:p-8 transition-all hover:border-white/20 hover:bg-[#151515]"
+                    href={`/proyectos/${project.id}`}
+                    className="group relative flex flex-col justify-between overflow-hidden rounded-xl md:rounded-2xl border border-white/10 bg-[#111111] p-4 md:p-8 transition-all hover:border-white/20 hover:bg-[#151515]"
                   >
                     <div>
-                      <div className="mb-5 flex items-center justify-between md:mb-6">
-                        <div className={`flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl ${project.color} bg-opacity-10 transition-transform group-hover:scale-110`}>
-                          <Icon size={24} className={`md:h-7 md:w-7 ${project.textColor}`} />
+                      {/* Cabecera de la tarjeta (Icono + Flecha) */}
+                      <div className="mb-3 md:mb-6 flex flex-row items-center justify-between">
+                        {/* Icono: Más pequeño en móvil (h-10 w-10), grande en PC */}
+                        <div className={`flex h-10 w-10 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-lg md:rounded-xl ${project.bgColor} transition-transform group-hover:scale-110`}>
+                          <Icon className={`h-5 w-5 md:h-7 md:w-7 ${project.textColor}`} />
                         </div>
-                        <div className="rounded-full bg-white/5 p-2 transition-colors group-hover:bg-white/10">
-                           <ArrowRight size={20} className="text-gray-500 transition-transform group-hover:-rotate-45 group-hover:text-white" />
+                        {/* Flecha: Visible siempre, adaptada en tamaño */}
+                        <div className="rounded-full bg-white/5 p-1.5 md:p-2 transition-colors group-hover:bg-white/10">
+                           <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-gray-500 transition-transform group-hover:-rotate-45 group-hover:text-white" />
                         </div>
                       </div>
                       
-                      <h3 className="mb-2 text-xl font-bold text-white group-hover:text-gray-200 md:text-2xl transition-colors">
+                      {/* Título: Ajuste de tamaño para que quepa en 2 columnas */}
+                      <h3 className="mb-1 md:mb-2 text-sm sm:text-base md:text-2xl font-bold text-white group-hover:text-gray-200 transition-colors leading-tight">
                         {project.name}
                       </h3>
-                      <p className="text-sm text-gray-400 leading-relaxed md:text-base">
+                      
+                      {/* Descripción: Oculta completamente en móvil para ahorrar espacio */}
+                      <p className="hidden md:block text-sm md:text-base text-gray-400 leading-relaxed">
                         {project.description}
                       </p>
                     </div>
 
-                    <div className="mt-6 flex flex-wrap gap-2 md:mt-8">
+                    {/* Etiquetas: Ocultas en móvil */}
+                    <div className="hidden md:flex mt-6 flex-wrap gap-2 md:mt-8">
                       {project.tags.map(tag => (
                         <span key={tag} className="rounded-md bg-white/5 px-2.5 py-1 text-xs font-medium text-gray-400 border border-white/10 transition-colors group-hover:text-gray-300">
                           {tag}
                         </span>
                       ))}
                     </div>
-                  </a>
+                  </Link>
                 );
               })}
             </div>
