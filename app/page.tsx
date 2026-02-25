@@ -48,9 +48,11 @@ export default function HubPage() {
           
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-              <div className="flex h-8 w-8 items-center justify-center rounded bg-gradient-to-br from-gray-800 to-gray-600 text-white dark:from-white dark:to-gray-400 font-bold dark:text-black shadow-sm">
-                S
-              </div>
+              <img 
+                src="/simpledevs.svg" 
+                alt="Logo SimpleDevs" 
+                className="h-8 w-8 object-contain" 
+              />
               <span className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                 SimpleDevs
               </span>
