@@ -1,5 +1,5 @@
 // lib/projects.ts
-import { Terminal, Smartphone, Database } from 'lucide-react';
+import { File, Database, ClockFading  } from 'lucide-react';
 
 // --- ICONO PERSONALIZADO: GUÍA PUNTANA ---
 export const GuiaPuntanaLogo = ({ className }: { className?: string }) => (
@@ -24,39 +24,28 @@ export const PROJECTS = [
     textColor: 'text-orange-500',
     gradient: 'from-orange-500/20 via-slate-50 to-slate-50 dark:from-orange-500/20 dark:via-[#000000] dark:to-[#000000]',
     link: 'https://guia-puntana.vercel.app',
-    tags: ['Next.js', 'Supabase', 'Directorio']
+    tags: ['Oficio', 'Trabajo', 'Social']
   },
   {
-    id: 'social-network',
-    name: 'SocialNet',
-    description: 'Plataforma de interacción social con recuperación de contraseñas y gestión de usuarios.',
-    icon: Smartphone, // Usamos iconos de lucide
+    id: 'san-luis-tramites',
+    name: 'San Luis Tramites',
+    description: 'Mi proximo tramite en San Luis.',
+    icon: File , // Usamos iconos de lucide
     bgColor: 'bg-blue-500/10',
     textColor: 'text-blue-500',
     gradient: 'from-blue-500/20 via-slate-50 to-slate-50 dark:from-blue-500/20 dark:via-[#000000] dark:to-[#000000]',
     link: '#',
-    tags: ['PHP', 'MySQL', 'Social']
+    tags: ['Trámite', 'Tiempo']
   },
   {
-    id: '3d-print-manager',
-    name: 'PrintFlow',
-    description: 'Panel de control para gestión y calibración de impresoras 3D Createbot.',
-    icon: Terminal,
+    id: 'InTheZone',
+    name: 'InTheZone',
+    description: 'Pomodoro app & habit tracker.',
+    icon: ClockFading,
     bgColor: 'bg-emerald-500/10',
     textColor: 'text-emerald-500',
     gradient: 'from-emerald-500/20 via-slate-50 to-slate-50 dark:from-emerald-500/20 dark:via-[#000000] dark:to-[#000000]',
-    link: '#',
-    tags: ['IoT', 'Dashboard']
-  },
-  {
-    id: 'dev-tools',
-    name: 'DevUtils',
-    description: 'Colección de herramientas y calculadoras enfocadas en programación funcional.',
-    icon: Database,
-    bgColor: 'bg-purple-500/10',
-    textColor: 'text-purple-500',
-    gradient: 'from-purple-500/20 via-slate-50 to-slate-50 dark:from-purple-500/20 dark:via-[#000000] dark:to-[#000000]',
-    link: '#',
-    tags: ['Herramientas', 'Open Source']
+    link: 'https://in-the-zone-app.vercel.app',
+    tags: ['Pomodoro', 'Productividad']
   },
 ];
