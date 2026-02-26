@@ -34,7 +34,7 @@ export const PROJECTS = [
     bgColor: 'bg-blue-500/10',
     textColor: 'text-blue-500',
     gradient: 'from-blue-500/20 via-slate-50 to-slate-50 dark:from-blue-500/20 dark:via-[#000000] dark:to-[#000000]',
-    link: '#',
+    link: 'https://san-luis-tramites.vercel.app',
     tags: ['Trámite', 'Tiempo']
   },
   {
