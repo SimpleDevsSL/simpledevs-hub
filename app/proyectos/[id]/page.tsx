@@ -1,34 +1,27 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use} from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { PROJECTS } from '@/lib/projects';
 import { useTheme } from 'next-themes';
-import { 
-  ArrowLeft,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
-  Sun,
-  Moon
-} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Github, ArrowLeft, ExternalLink, ChevronLeft, ChevronRight, Sun, Moon} from 'lucide-react';
 import { ImWindows } from "react-icons/im"; // <-- Tu importación de react-icons
 
+let globalDirection = 1;
 
 export default function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const [projectId, setProjectId] = useState<string | null>(null);
+  // 1. Usamos el nuevo hook de React para leer el ID al instante
+  const { id: projectId } = use(params);
 
-  // Estados del Tema
+  // 2. Mantenemos SOLO el estado de montaje para el modo oscuro
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    params.then((p) => setProjectId(p.id));
-  }, [params]);
-
-  if (!projectId) return null; 
+  }, []);
 
   const currentIndex = PROJECTS.findIndex((p) => p.id === projectId);
 
@@ -49,10 +42,23 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-slate-50 transition-colors duration-300 dark:bg-[#000000] font-sans overflow-hidden">
       
-      {/* --- FONDO --- */}
+      {/* --- FONDO ANIMADO --- */}
       <div className={`absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] ${project.gradient} opacity-60 dark:opacity-40 transition-colors duration-1000`}></div>
-      <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-[0.03] pointer-events-none transition-all duration-1000">
-        <Icon className="h-[150vw] w-[150vw] md:h-[80vw] md:w-[80vw] text-gray-900 dark:text-white" />
+      
+      {/* Contenedor del ícono con overflow-hidden para que no se extienda la pantalla */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-[0.03] pointer-events-none overflow-hidden">
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={project.id} // La clave hace que la animación se dispare al cambiar de proyecto
+            initial={{ x: globalDirection === 1 ? '60vw' : '-60vw', opacity: 0, scale: 0.8 }}
+            animate={{ x: 0, opacity: 1, scale: 1 }}
+            exit={{ x: globalDirection === 1 ? '-60vw' : '60vw', opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <Icon className="h-[150vw] w-[150vw] md:h-[80vw] md:w-[80vw] text-gray-900 dark:text-white" />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* --- BOTÓN VOLVER (Fijo Arriba Izquierda) --- */}
@@ -114,6 +120,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
       {/* --- CONTROLES LATERALES (Desktop - Fijos a los lados) --- */}
       <Link 
         href={`/proyectos/${prevProject.id}`}
+        onClick={() => { globalDirection = -1; }}
         title={`Anterior: ${prevProject.name}`}
         className="fixed left-8 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/80 p-4 text-gray-500 shadow-sm backdrop-blur-md transition-all hover:scale-110 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:border-white/10 dark:bg-[#111111]/80 dark:text-gray-400 dark:shadow-lg dark:hover:border-white/30 dark:hover:bg-white/10 dark:hover:text-white md:flex"
       >
@@ -122,6 +129,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
 
       <Link 
         href={`/proyectos/${nextProject.id}`}
+        onClick={() => { globalDirection = 1; }}
         title={`Siguiente: ${nextProject.name}`}
         className="fixed right-8 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white/80 p-4 text-gray-500 shadow-sm backdrop-blur-md transition-all hover:scale-110 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 dark:border-white/10 dark:bg-[#111111]/80 dark:text-gray-400 dark:shadow-lg dark:hover:border-white/30 dark:hover:bg-white/10 dark:hover:text-white md:flex"
       >
@@ -156,16 +164,36 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           ))}
         </div>
 
-        {/* Botón de Enlace al Sitio */}
-        <a 
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center gap-3 rounded-xl bg-gray-900 px-8 py-4 text-base md:text-lg font-bold text-white shadow-lg transition-all hover:scale-105 hover:bg-black active:scale-95 dark:bg-white dark:text-black dark:shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] dark:hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.5)]"
-        >
-          Visitar Sitio Web
-          <ExternalLink size={20} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </a>
+        {/* --- CONTENEDOR DE BOTONES --- */}
+        <div className="flex flex-col items-center gap-4 w-full px-4">
+          
+          {/* Botón Principal: Visitar Sitio Web */}
+          {project.link && project.link !== '#' && (
+            <a 
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex w-full max-w-sm items-center justify-center gap-3 rounded-xl bg-gray-900 px-8 py-4 text-base md:text-lg font-bold text-white shadow-lg transition-all hover:scale-105 hover:bg-black active:scale-95 dark:bg-white dark:text-black dark:shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] dark:hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.5)]"
+            >
+              Visitar Sitio Web
+              <ExternalLink size={20} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          )}
+
+          {/* Botón Secundario: Repositorio GitHub (Versión Pequeña) */}
+          {(project as any).github && (project as any).github !== '#' && (
+            <a 
+              href={(project as any).github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white/30 px-5 py-2 text-sm font-medium text-gray-600 backdrop-blur-sm transition-all hover:scale-105 hover:bg-white hover:text-gray-900 active:scale-95 dark:border-gray-700 dark:bg-black/30 dark:text-gray-400 dark:hover:bg-black dark:hover:text-white"
+            >
+              <Github size={16} className="transition-transform group-hover:scale-110" />
+              <span>Ver Código en GitHub</span>
+            </a>
+          )}
+
+        </div>
 
       </div>
 
@@ -173,12 +201,14 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
       <div className="fixed bottom-4 left-4 right-4 z-50 flex gap-4 md:hidden">
         <Link 
           href={`/proyectos/${prevProject.id}`}
+          onClick={() => { globalDirection = -1; }}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white/95 py-3 text-sm font-medium text-gray-700 shadow-lg backdrop-blur-md transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-[#111111]/95 dark:text-gray-300 dark:shadow-2xl dark:hover:bg-white/10 dark:hover:text-white"
         >
           <ChevronLeft size={18} /> Anterior
         </Link>
         <Link 
           href={`/proyectos/${nextProject.id}`}
+          onClick={() => { globalDirection = 1; }}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white/95 py-3 text-sm font-medium text-gray-700 shadow-lg backdrop-blur-md transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-[#111111]/95 dark:text-gray-300 dark:shadow-2xl dark:hover:bg-white/10 dark:hover:text-white"
         >
           Siguiente <ChevronRight size={18} />

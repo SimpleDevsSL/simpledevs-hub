@@ -24,6 +24,7 @@ export const PROJECTS = [
     textColor: 'text-orange-500',
     gradient: 'from-orange-500/20 via-slate-50 to-slate-50 dark:from-orange-500/20 dark:via-[#000000] dark:to-[#000000]',
     link: 'https://guia-puntana.vercel.app',
+    github: 'https://github.com/SimpleDevsSL/guia-puntana',
     tags: ['Oficio', 'Trabajo', 'Social']
   },
   {
@@ -35,6 +36,7 @@ export const PROJECTS = [
     textColor: 'text-violet-500',
     gradient: 'from-violet-500/20 via-slate-50 to-slate-50 dark:from-violet-500/20 dark:via-[#000000] dark:to-[#000000]',
     link: 'https://san-luis-tramites.vercel.app',
+    github: 'https://github.com/SimpleDevsSL/San-Luis-Tramites',
     tags: ['Trámite', 'Tiempo']
   },
   {
@@ -46,6 +48,7 @@ export const PROJECTS = [
     textColor: 'text-emerald-500',
     gradient: 'from-emerald-500/20 via-slate-50 to-slate-50 dark:from-emerald-500/20 dark:via-[#000000] dark:to-[#000000]',
     link: 'https://in-the-zone-app.vercel.app',
+    github: 'https://github.com/lautaro1910/InTheZone',
     tags: ['Pomodoro', 'Productividad']
   },
 ];
